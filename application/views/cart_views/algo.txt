@@ -1,0 +1,8 @@
+a shopping website with stockpiling ability
+a register page 
+a login page
+build a cart system
+create a table for each stockpiller
+and a landing page for each stockpiler to monitor and manage their their pile
+create an admin to create product table
+save images path to database
