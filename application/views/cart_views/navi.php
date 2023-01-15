@@ -7,38 +7,42 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Document</title>
         <style>
-            /* body{
-                position: relative;
-            } */
-            #navdiv{
-                
-                display:flex;
-                justify-content:space-evenly;
-               
-            }
-            #navdiv a{
-                text-decoration: none;
-                /* background-color: red; */
-                width: 10rem;
-                /* height: 3rem; */
-                text-align: center;
-                padding: 2rem;
-            }
-            hr{
-                height: 5rem;
-            }
-            #navdiv a:hover{
-                background-color: #8c2473 ;
-                color: white;
-            }
-
+            
         </style>
     </head>
     <body>
-        <div id="navdiv">
+        <nav class="navi">
+            <div class="logo">
+                <img src="" alt="">
+            </div>
+            <form action="Habit" method="POST">
+                <img src="" alt="">
+                <input type="text" name="search">
+                <button>SEARCH</button>
+            </form>
+            <div class="theRest">
+                <div class="account">
+                    <a href="">
+                        <img src="" alt="">
+                        <span>Account</span>
+                        <img src="" alt="">
+                    </a>
+                </div>
+                <div class="help">
+                    <img src="" alt="">
+                    <span>Help</span>
+                    <img src="" alt="">
+                </div>
+                <div class="cart">
+                    <img src="" alt="">
+                    <span>Cart</span>
+                </div>
+            </div>
+        </nav>
+        <!-- <div id="navdiv">
             <a href="http://localhost/test/dianas_shopping_habit/index.php/habit/">Home</a><hr>
             <a href="http://localhost/test/mans_not_hot/index.php/habit/shoppers_page.php">Ur items</a><hr>
             <a href="http://localhost/test/mans_not_hot/index.php/habit/cart_page.php">Ur cart</a>
-        </div>                           
+        </div>                            -->
     </body>
     </html>

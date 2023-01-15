@@ -12,13 +12,13 @@
 </head>
 <body>
     <?php foreach ($product as  $key => $info): ?>
-        <a href="">
-            <div class="items">
+        <div class="items">
+            <a href="<?php echo 'Habit/shop/'.$product['id']; ?>">
                 <img src="<?php echo $product['path']; ?>" alt="" id="">
-                <p>description</p>
-                <span>price</span>
-            </div>
-        </a>
+                <p><?php echo $product['summary']; ?></p>
+                <span><?php echo $product['price']; ?></span>
+            </a>
+        </div>
     <?php endforeach; ?>
 </body>
 </html>

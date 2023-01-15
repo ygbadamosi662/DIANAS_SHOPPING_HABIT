@@ -143,6 +143,12 @@ class Admin extends CI_Controller {
             'min_length' => '{field} must be atleast {param} characters',
         ));
 
+        $this->form_validation->set_rules('summary','description','required|max_length[250]|min_length[3]',array(
+            'required' => '{field} is required',
+            'max_length' => '{field} can not be more than {param} characters.',
+            'min_length' => '{field} must be atleast {param} characters',
+        ));
+
         if ($this->form_validation->run() == FALSE)
         {
             $this->load->view('cart_views/adminpage');
@@ -156,7 +162,8 @@ class Admin extends CI_Controller {
                'brand_string' => $_POST['brand'],
                'price_string' => $_POST['price'],
                'quantity_string' => $_POST['quantity'],
-               'path_url' => $_POST['path']
+               'path_url' => $_POST['path'],
+               'summary_string[]' => $_POST['describe']
             ];
 
             
