@@ -14,15 +14,17 @@
 <body>
     <h3><?php echo $header ?></h3>
 
-    <p><?php echo anchor('habit/admin', 'Review your information'); ?></p>
+    
 
     <div >
-        <?php foreach ($product as $key => $info): ?>
-            <h4><?php echo $info ?></h4>
+        <?php foreach ($product as  $key => $info): ?>
+            <?php echo '<h4>'.$key.': '.$info.'</h4>' ?>
         <?php endforeach; ?>
         
     </div>
-    <!-- <a href=""></a> -->
+
+    <p><?php echo anchor('habit/', 'click here to save this information'); ?></p>
+    
     
 </body>
 </html>

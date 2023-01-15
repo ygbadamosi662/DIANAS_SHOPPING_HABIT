@@ -9,7 +9,7 @@
 </head>
 <body>
     <?php echo validation_errors(); ?>
-    <?php echo form_open('habit/admin'); ?>
+    <?php echo form_open('Admin/admins'); ?>
         <h1>Product Registration</h1>
 
         <h5>Name of product</h5>

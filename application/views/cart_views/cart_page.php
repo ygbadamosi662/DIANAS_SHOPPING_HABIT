@@ -8,6 +8,8 @@
     <title>Document</title>
 </head>
 <body>
-    <?php echo foreach ():?>
+    <div>
+        boys will be boys
+    </div>
 </body>
 </html>

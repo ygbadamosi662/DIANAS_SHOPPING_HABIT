@@ -11,9 +11,14 @@
     <title>Document</title>
 </head>
 <body>
-    <form action="" method="POST">
-
-        
-    </form>
+    <?php foreach ($product as  $key => $info): ?>
+        <a href="">
+            <div class="items">
+                <img src="<?php echo $product['path']; ?>" alt="" id="">
+                <p>description</p>
+                <span>price</span>
+            </div>
+        </a>
+    <?php endforeach; ?>
 </body>
 </html>
