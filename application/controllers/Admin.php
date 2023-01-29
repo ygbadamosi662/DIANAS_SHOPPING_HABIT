@@ -37,7 +37,7 @@ class Admin extends CI_Controller {
         // you can use whatever u want as a delimeter
         // this function returns an associative array of ur sanitized data with name_of_field as its key when both the $input and the $filters are associative array
         // you can use one filter for all ur inputs if you pass a filter as ur parameter instead of an array of filters
-        // if only a single input is passed instead of array then a filter is required not an array of fileter and it returns the sanitized data.
+        // if only a single input is passed instead of array then a filter is required not an array of filters and it returns the sanitized data.
             
         if (is_array($input)){
             $data = array();
@@ -58,7 +58,7 @@ class Admin extends CI_Controller {
                         if ($filtersKeys[$i] == $matcher) {
                             if(is_array($filters[$filtersKeys[$i]])){
                                 $filter = $filters[$filtersKeys[$i]];
-                                $data[$newKey] = filter_var($input[$key],$filter[0],$filter[1]);
+                                $data[$newKey] = filter_var($input[$key],$filter['filter'],$filter['flags']);
                                 break;
                             }
                             else{
@@ -102,71 +102,64 @@ class Admin extends CI_Controller {
     public function index($logged = 0)
 	{
         
-        echo ('PHP version: ' . phpversion());
+        // echo ('PHP version: ' . phpversion());
 
 		$this->load->view('cart_views/home');
 	}
     
     public function admins()
     {
+
         $this->load->helper(array('form','url'));
         $this->load->library('form_validation');
-
         $this->form_validation->set_rules('name','Product name','required|max_length[15]|min_length[2]',array(
             'required' => '{field} is required',
             'max_length' => '{field} can not be more than {param} characters.',
             'min_length' => '{field} must be atleast {param} characters',
         ));
-
         $this->form_validation->set_rules('brand','Product brand','required|max_length[15]|min_length[2]',array(
             'required' => '{field} is required',
             'max_length' => '{field} can not be more than {param} characters.',
             'min_length' => '{field} must be atleast {param} characters',
         ));
-
         $this->form_validation->set_rules('price','Product price','required|max_length[15]|min_length[2]',array(
             'required' => '{field} is required',
             'max_length' => '{field} can not be more than {param} characters.',
             'min_length' => '{field} must be atleast {param} characters',
         ));
-
         $this->form_validation->set_rules('quantity','Quantity of product','required|max_length[15]|min_length[2]|integer',array(
             'required' => '{field} is required',
             'max_length' => '{field} can not be more than {param} characters.',
             'min_length' => '{field} must be atleast {param} characters',
             'integer' => '{field} must be a number'
         ));
-
-        $this->form_validation->set_rules('path','Image path','required|max_length[15]|min_length[2]',array(
+        $this->form_validation->set_rules('image','Image path','required|max_length[15]|min_length[2]',array(
             'required' => '{field} is required',
             'max_length' => '{field} can not be more than {param} characters.',
             'min_length' => '{field} must be atleast {param} characters',
         ));
-
         $this->form_validation->set_rules('summary','description','required|max_length[250]|min_length[3]',array(
             'required' => '{field} is required',
             'max_length' => '{field} can not be more than {param} characters.',
             'min_length' => '{field} must be atleast {param} characters',
         ));
-
         if ($this->form_validation->run() == FALSE)
         {
             $this->load->view('cart_views/adminpage');
         }
         else
         {
-            
-
+            if(isset($_POST['name'])){
+            }
             $in = [
                'name_string' => $_POST['name'],
                'brand_string' => $_POST['brand'],
                'price_string' => $_POST['price'],
                'quantity_string' => $_POST['quantity'],
-               'path_url' => $_POST['path'],
-               'summary_string[]' => $_POST['describe']
+               'image_url' => $_POST['image'],
+               'summary_string' => $_POST['summary']
             ];
-
-            
+           
             $filters = array(
                 'string' => FILTER_SANITIZE_STRING,
                 'string[]' => array(
@@ -192,14 +185,20 @@ class Admin extends CI_Controller {
                 ),
                 'url' => FILTER_SANITIZE_URL
             );
-            
             // var_dump($this->sanitize($in,$filters,'_'));
             $data['product'] = $this->sanitize($in,$filters,'_');
-            $data['header'] = "review your info";
-    
-            $this->load->view('cart_views/review',$data);
+            echo $data['product']['summary'];
+            
+            $data['header'] = "PRODUCT INFORMATION";
+            $query = $this->db->insert('products',$data['product']);
+            if($query){
+                $this->load->view('cart_views/review',$data);
+            }
+            else{
+                echo "Something went wrong";
+            }
+           
         }
         
     }
-    
 }

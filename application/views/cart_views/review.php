@@ -13,17 +13,16 @@
 </head>
 <body>
     <h3><?php echo $header ?></h3>
-
     
+        <div >
+            <?php foreach ($product as  $key => $info): ?>
+                <?php echo '<h4>'.$key.': '.$info.'</h4>' ?>
+            <?php endforeach; ?>
+        </div>
 
-    <div >
-        <?php foreach ($product as  $key => $info): ?>
-            <?php echo '<h4>'.$key.': '.$info.'</h4>' ?>
-        <?php endforeach; ?>
-        
-    </div>
-
-    <p><?php echo anchor('habit/', 'click here to save this information'); ?></p>
+        <p>The above products information is saved <h3>succesfully</h3></p>
+    
+    
     
     
 </body>

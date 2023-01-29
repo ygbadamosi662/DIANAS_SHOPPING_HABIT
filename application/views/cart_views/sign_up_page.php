@@ -11,8 +11,7 @@
     <?php echo validation_errors(); ?>
 
     <?php echo form_open('habit/register'); ?>
-
-    <!-- <form action="sign_up_page.php" method="POST"> -->
+    
         <h1>Sign Up with us</h1>
 
         <div >

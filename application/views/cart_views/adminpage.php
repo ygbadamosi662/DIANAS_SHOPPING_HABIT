@@ -25,7 +25,7 @@
         <input type="text" name="quantity" value="<?php echo set_value('quantity'); ?>">
 
         <h5>Image path</h5>
-        <input type="text" name="path" value="<?php echo set_value('path'); ?>">
+        <input type="text" name="image" value="<?php echo set_value('path'); ?>">
 
         <h5>Product description</h5>
         <input type="text" name="summary" value="<?php echo set_value('path'); ?>">

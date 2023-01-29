@@ -9,7 +9,12 @@ class Habit extends CI_Controller {
     public function __construct() {
         
         parent::__construct();
+
         $this->load->database();
+
+        $this->load->helper(array('form','url'));
+        $this->load->library('form_validation');
+        $this->load->helper('url');
         
         // $this->load->helper('url', 'form');
         // $this->load->library('form_validation');
@@ -65,7 +70,7 @@ class Habit extends CI_Controller {
                         if ($filtersKeys[$i] == $matcher) {
                             if(is_array($filters[$filtersKeys[$i]])){
                                 $filter = $filters[$filtersKeys[$i]];
-                                $data[$newKey] = filter_var($input[$key],$filter[0],$filter[1]);
+                                $data[$newKey] = filter_var($input[$key],$filter['filter'],$filter['flags']);
                                 break;
                             }
                             else{
@@ -366,29 +371,126 @@ class Habit extends CI_Controller {
             }
         }
     }
+
+    private function moneyFormatter($moneyString)
+    {
+        $array = str_split($moneyString);
+        $arraylast = count($array)-1;
+        $holding = array();
+        if ((count($array) > 3)){
+            
+            $mod = count($array)%3;
+            if ($mod == 0){
+                $chk = count($array)/3;
+            }
+            else{
+                $chk = ((count($array) - $mod)/3) + 1;
+            }
+            
+
+            for ($chk; $chk>0; $chk--){
+                
+                if($arraylast >= 3){
+                    
+                    $temparray= array_slice($array,$arraylast-2,3);
+
+                    array_push($holding,$temparray);
+
+                    $arraylast = $arraylast-3;
+                }
+                else 
+                {
+                    $kik = array();
+                    for ($i=0; $i<=$arraylast; $i++){
+                        array_push($kik,$array[$i]);
+                    }
+                    array_push($holding,$kik);
+                }
+            
+            }
+            
+            $holding = array_reverse($holding);
+            $shit = array();
+            
+            
+            foreach($holding as $hold){
+                $str = implode('',$hold);
+                array_push($shit,$str);
+            }
+            $formattedString = implode(',',$shit);
+            
+            return $formattedString;
+
+            
+        }
+        else{
+           
+            return $moneyString;
+            
+        }
+
+        // if (((count($array)%3) == 0) && !(count($array) == 3)){
+        //     $chk = count($array)/3;
+
+        //     for ($chk; $chk>0; $chk--){
+        //         if ((!is_empty($holding)) ){
+        //             // $temparray = array_push($temparray,$temparray[count($temparray)-1])
+                    
+        //             $temparray[0] = ',';
+        //             $temparray= array_push(implode('',array_slice($array,$arraylast-2,3)));
+
+        //             array_push($holding,$holding[count($holding)-1]);
+        //             $holding[count($holding)-2] = $temparray;
+
+        //             $arraylast = $arraylast-2;
+
+        //         }
+        //         elseif (is_empty($holding))
+        //         {
+        //             $temparray[0] = ',';
+        //             $temparray = array_push($temparray,implode('',array_slice($array,$arraylast-2)));
+                
+        //             array_push($holding,$temparray);
+
+        //             $arraylast = $arraylast-2;
+
+        //         }
+    
+        //     }
+
+            
+
+        
+        
+    }
     
 
 	public function index($logged = 0)
 	{
         
-        echo ('PHP version: ' . phpversion());
+        // echo ('PHP version: ' . phpversion());
+        // echo $this->moneyFormatter('6586900039');
+        $this->load->helper('url');
+        // echo base_url();
 
         $query = $this->db->get('products');
 
+       
         $data['products'] = $query->result_array();
-
+        //  print_r($data['products']);
+        
         $this->load->view('cart_views/navi');
 		$this->load->view('cart_views/home',$data);
+
+        
 	}
 
     // public $lol = 0;
 
     public function register(){
     
-        
-
-        $this->load->helper(array('form','url'));
-        $this->load->library('form_validation');
+        // $this->load->helper(array('form','url'));
+        // $this->load->library('form_validation');
 
         $this->form_validation->set_rules('fname','Firstname','required|trim|max_length[15]|min_length[2]',array(
             'required' => '{field} is required',
@@ -405,8 +507,7 @@ class Habit extends CI_Controller {
             'max_length' => '{field} can not be more than {param} characters.',
             'min_length' => '{field} must be atleast {param} characters'
         ));
-        // $this->form_validation->set_rules('country_code','Country code','',array());
-
+        
         $this->form_validation->set_rules('email','Email','required|max_length[100]|min_length[11]|is_unique[customers.email]',array(
             'required' => '{field} is required',
             'max_length' => '{field} can not be more than {param} characters.',
@@ -432,34 +533,60 @@ class Habit extends CI_Controller {
             
             
         ));
-        // $this->form_validation->set_rules('gender','Gender','',array(  
-        // ));
         
         if( $this->form_validation->run() == FALSE ){
-            
+
             $this->load->view('cart_views/sign_up_page');
         }
         else
         {
-            // $array = array(
-            //     'encrypted'=> 'none';
-            //     'key' => 'not a stockpiller';
-            // );
-            // $jsonStockPiller = json_encode($array);
-            // $data = array(
-            //     'fname'=> $_POST['fname'],
-            //     'lname'=> $_POST['lname'],
-            //     'country_code'=> $_POST['zip'],
-            //     'phone'=> $_POST['pNum'],
-            //     'email'=> $_POST['email'],
-            //     'password'=> $_POST['password'],
-            //     'dob'=> $_POST['dob'],
-            //     'username'=> $_POST['uName'],
-            //     'gender'=> $_POST['gender'],
-            //     'stockpiller'=> $jsonStockpiller
-            // );
-            $this->load->view('cart_views/formsuccess');
+            $in = [
+                'fname_string' => $_POST['fname'],
+                'lname_string' => $_POST['lname'],
+                'password_string' => $_POST['password'],
+                'country_code_string' => $_POST['country_code'],
+                'phone_string' => $_POST['phone'],
+                'email_string' => $_POST['email'],
+                'gender_string' => $_POST['gender'],
+                'dob_string' => $_POST['dob'],
+                'username_string' => $_POST['username']
+             ];
+             
+             $filters = array(
+                 'string' => FILTER_SANITIZE_STRING,
+                 'string[]' => array(
+                     'filter' => FILTER_SANITIZE_STRING,
+                     'flags' => FILTER_REQUIRE_ARRAY
+                 ),
+                 'email' => FILTER_SANITIZE_EMAIL,
+                 'int' => array(
+                     'filter' => FILTER_SANITIZE_NUMBER_INT,
+                     'flags' => FILTER_REQUIRE_SCALAR
+                 ),
+                 'int[]' => array(
+                     'filter' => FILTER_SANITIZE_NUMBER_INT,
+                     'flags' => FILTER_REQUIRE_ARRAY
+                 ),
+                 'float' => array(
+                     'filter' => FILTER_SANITIZE_NUMBER_FLOAT,
+                     'flags' => FILTER_FLAG_ALLOW_FRACTION
+                 ),
+                 'float[]' => array(
+                     'filter' => FILTER_SANITIZE_NUMBER_FLOAT,
+                     'flags' => FILTER_REQUIRE_ARRAY
+                 ),
+                 'url' => FILTER_SANITIZE_URL
+             );
             
+            $data['data'] = $this->sanitize($in,$filters,'_');
+            $query = $this->db->insert('customers',$data['data']);
+            if($query){
+                $this->load->view('cart_views/formsuccess');
+            }
+            else{
+                echo 'db request not successful';
+            }
+               
         }
     
 
@@ -467,12 +594,144 @@ class Habit extends CI_Controller {
         
     }
         
-    public function shop ()
+    public function shop ($id = 0)
     {
-        $query = $this->db->get('products');
-        $data['product'] = $query->result_array();
-    }
+        $this->load->library('session');
+        $this->load->helper('url');
+        
+        $query = $this->db->get_where('products',array('id'=>$id));
+        if ($query){
+            $oBoy = $query->result_array();
+            $data['product'] = $oBoy[0];
+            $data['product']['formatted'] = $this->moneyFormatter($data['product']['price']);  
+        }
+        else{
+            echo 'soething went wrong';
+        }
+
+        if (isset($_POST['submit'])){
+            if($_SESSION['cart']){
+                $_SESSION['cart'][$data['product']['name']] = array(
+                    'product' => $data['product'],
+                    'quantity' => '1'
+                );
+                
+            }
+            else{
+                $_SESSION['cart'] = array(
+                    $data['product']['name'] => array(
+                        'product' => $data['product'],
+                        'quantity' => '1'
+                    )
+                );
+            }
+            $data['count'] = count($_SESSION['cart']);
+
+            echo '<div class="alert">'.'item added to cart succesfully'.'</div>';
+        }
+        
+        
+        $this->load->view('cart_views/navi.php',$data);
+        $this->load->view('cart_views/cart_page',$data);
     
+    }
+
+    private function subtotal($session = array()){
+        $total = 0;
+        if($session){
+        
+            foreach($session as $ss) {
+                settype($ss['product']['price'],'int');
+                settype($ss['quantity'],'int');
+                $total = $total + ($ss['product']['price'] * $ss['quantity']);
+            }
+            settype($total,'string');
+
+            return $total;
+        }
+        else{
+            echo 'array required';
+        }
+
+    }
+
+    public function cart(){
+        $this->load->library('session');
+        if(!isset($_POST['checkout'])){
+            if((count($_SESSION['cart']) > 0)){
+
+            
+                $data['count'] = 0;
+
+                foreach($_SESSION['cart'] as $item){
+                    // $item['product']['formatted'] = $this->moneyFormatter($item['product']['price']);
+
+                    settype($item['quantity'],'int');
+                    $data['count'] = $data['count'] + $item['quantity'];
+                    settype($item['quantity'],'string');
+                
+                }
+                $data['subtotal'] = $this->moneyFormatter($this->subtotal($_SESSION['cart']));
+                $data['items'] = $_SESSION['cart'];    
+
+                if(isset($_POST['plus'])) {
+                
+                    settype($_SESSION['cart'][$_POST['subtle']]['quantity'],'int');
+                    ++$_SESSION['cart'][$_POST['subtle']]['quantity'];
+                    settype($_SESSION['cart'][$_POST['subtle']]['quantity'],'string');
+
+                    ++$data['count'];
+
+
+
+                    $data['items'] = $_SESSION['cart'];
+                    $data['subtotal'] = $this->moneyFormatter($this->subtotal($_SESSION['cart']));
+
+
+
+
+
+                }
+                elseif(isset($_POST['minus'])){
+                    if($_SESSION['cart'][$_POST['subtle']]['quantity'] != '0'){
+                       settype($_SESSION['cart'][$_POST['subtle']]['quantity'],'int');
+                    
+
+                       --$_SESSION['cart'][$_POST['subtle']]['quantity'];
+                       settype($_SESSION['cart'][$_POST['subtle']]['quantity'],'string');
+
+                       --$data['count'];
+
+                       $data['items'] = $_SESSION['cart'];
+                       $data['subtotal'] = $this->moneyFormatter($this->subtotal($_SESSION['cart']));
+                    
+                       if($_SESSION['cart'][$_POST['subtle']]['quantity'] == '0'){
+                           unset($_SESSION['cart'][$_POST['subtle']]);
+                           $data['items'] = $_SESSION['cart'];
+
+                       }
+                    }
+
+
+                }
+                elseif(isset($_POST['remove'])){
+                    unset($_SESSION['cart'][$_POST['subtle']]);
+                    $data['items'] = $_SESSION['cart'];
+
+
+                }
+
+
+            }
+
+            $this->load->view('cart_views/navi.php',$data);
+            $this->load->view('cart_views/list_item.php',$data);
+        }
+        elseif(isset($_POST['checkout'])){
+            $this->load->view('cart_views/navi.php',$data);
+            $this->load->view('cart_views/checkout.php');
+        }
+    }
 
     
 }
