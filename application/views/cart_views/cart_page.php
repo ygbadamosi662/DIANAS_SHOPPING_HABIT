@@ -25,17 +25,17 @@
     </style>
 </head>
 <body>
-    <form action="" method="POST">
-        <img src="<?php echo base_url('resources/images/'.$product['image']); ?>" alt="">
+    <form action="<?php echo base_url('index.php/Habit/shop/'.$product[$name]['product']['product_id']); ?>" method="POST">
+        <img src="<?php echo base_url('resources/images/'.$product[$name]['product']['image']); ?>" alt="">
         <div class="moneySide">
-            <h4>Brand:</h4>
-            <h3><?php echo $product['name']; ?></h3>
+            <h4>Product:</h4>
+            <h3><?php echo $product[$name]['product']['name']; ?></h3>
             <div class="price">
                 <h4>&#8358</h4>
-                <span><?php echo $product['price']; ?></span>
+                <span><?php echo $product[$name]['formatted']; ?></span>
             </div>
 
-            <p><?php echo $product['summary']?></p>
+            <p><?php echo $product[$name]['product']['summary']?></p>
             
             <button name="submit" type="submit">ADD TO CART</button>
         </div>  

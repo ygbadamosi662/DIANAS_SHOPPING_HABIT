@@ -99,12 +99,30 @@ class Admin extends CI_Controller {
         
     }
 
+    private function testing_test(){
+        $this->load->dbforge();
+        $this->dbforge->add_field("`id` INT(9) NOT NULL AUTO_INCREMENT, `name` VARCHAR(50) NOT NULL, `quantity` VARCHAR(50) NOT NULL, `brand` VARCHAR(50) NOT NULL, `pay_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, `update_on` TIMESTAMP NOT NULL  ON UPDATE CURRENT_TIMESTAMP, `price_on_pay` INT(20) NOT NULL, `price_now` INT(20) NOT NULL, `image` VARCHAR(20) NOT NULL, CONSTRAINT `pk_` PRIMARY KEY(`id`) ");
+        $hi = "DEFAULT 'CURRENT_TIMESTAMP',DEFAULT 'CURRENT_TIMESTAMP'";
+        $hey = 'hey hey';
+        $queryFunc = $this->dbforge->create_table($hey,TRUE);
+        echo 'like';
+
+    }
+
     public function index($logged = 0)
 	{
         
         // echo ('PHP version: ' . phpversion());
+        // $this->load->dbforge();
+        // $this->dbforge->add_field("`id` INT(9) NOT NULL AUTO_INCREMENT, `name` VARCHAR(50) NOT NULL, `quantity` VARCHAR(50) NOT NULL, `brand` VARCHAR(50) NOT NULL, `pay_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, `update_on` TIMESTAMP NOT NULL  ON UPDATE CURRENT_TIMESTAMP, `price_on_pay` INT(20) NOT NULL, `price_now` INT(20) NOT NULL, `image` VARCHAR(20) NOT NULL, CONSTRAINT `pk_` PRIMARY KEY(`id`) ");
+        // $hi = "DEFAULT 'CURRENT_TIMESTAMP',DEFAULT 'CURRENT_TIMESTAMP'";
+        // $hey = 'hey hey';
+        // $queryFunc = $this->dbforge->create_table($hey,TRUE);
+        // echo 'like';
 
-		$this->load->view('cart_views/home');
+        $this->testing_test();
+
+		$this->load->view('cart_views/content');
 	}
     
     public function admins()

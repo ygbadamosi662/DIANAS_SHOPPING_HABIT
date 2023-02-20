@@ -7,7 +7,8 @@
     <title>Document</title>
 </head>
 <body>
-    <h3><?=$success?></h3>
-    <p><?php echo anchor('habit/', 'Go To Home'); ?></p>
+    <form action="" method="POST">
+        
+    </form>
 </body>
 </html>

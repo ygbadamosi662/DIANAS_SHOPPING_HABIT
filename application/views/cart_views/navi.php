@@ -29,6 +29,7 @@
             .drop_down{
                 height: 1rem;
                 width: 1.5rem;
+                cursor: pointer;
             }
             .theRest{
                 display: flex;
@@ -74,6 +75,7 @@
                 text-decoration: none;
                 margin-bottom: 0.2rem;
                 border: 1px solid ;
+                cursor: pointer;
             }
             .helpers{
                 position: absolute;
@@ -87,31 +89,38 @@
                 margin-bottom: 0.2rem;
                 border: 1px solid ;
             }
+            #logout{
+                /* display: none;
+                margin-bottom: 0.2rem;
+                border: 1px solid ;
+                cursor: pointer; */
+
+            }
             
         </style>
     </head>
     <body>
         <nav class="navi">
             <div class="logo">
-                <a href="<?php echo base_url('index.php/Habit'); ?>"><img src="<?php echo base_url('resources/images/dlogo.jpg'); ?>" alt=""></a>
+                <a href="<?php echo base_url('index.php/Habit/'); ?>"><img src="<?php echo base_url('resources/images/dlogo.jpg'); ?>" alt=""></a>
             </div>
-            <form action="Home" method="POST">
-                <!-- <img src="" alt=""> -->
-                <input type="text" name="search">
-                <button name="search">SEARCH</button>
+            <form action="<?php echo base_url('index.php/Habit/catalog/'.$_POST['search_for']) ; ?>" method="POST">
+                <input type="text" name="search_for" value="<?php echo isset($_POST['search_for'])? $_POST['search_for'] : '' ; ?>">
+                <button name="search" type="submit">SEARCH</button>
+                <!-- <a href="">search  </a> -->
             </form>
+            <form action="<?php echo base_url('index.php/Habit/catalog/'.$_POST['search_for']) ; ?>"></form>
             <div class="theRest">
                 <div class="account">
-                    <!-- <img src="" alt=""> -->
                     <span>Account</span>
                     <img src="<?php echo base_url('resources/images/drop_down.png'); ?>" alt="" class="drop_down" id="drop">
                 </div>
                 <div class="gen_z">
-                    <a href="">Sign Up</a>
-                    <a href="">Sign In</a>
+                    <a href="<?php echo base_url('index.php/Habit/register'); ?>">Sign Up</a>
+                    <a href="<?php echo base_url('index.php/Habit/loginHandler'); ?>">Sign In</a>
                 </div>
+
                 <div class="help">
-                    <!-- <img src="" alt=""> -->
                     <span>Help</span>
                     <img src="<?php echo base_url('resources/images/drop_down.png'); ?>" alt="" class="drop_down" id="drop_help">
                 </div>
@@ -122,29 +131,56 @@
                 <a href="<?php echo base_url('index.php/Habit/cart'); ?>" class="cart">
                     <span>Cart</span>
                     <img src="<?php echo base_url('resources/images/cartlogo.jpg'); ?>" alt="">
-                    <?php if($count != 0 ):?>
-                        <h3><?=$count?></h3>
+                    <?php if(($product['count'] != 0)):?>
+                        <h3><?=$product['count']?></h3>
                     <?php endif;?>
                 </a>
+                <?php if(isset($customer)):?>
+                    <form action="<?php echo base_url('index.php/Habit/'); ?>" method="POST" id="logout">
+                            <button name="logout" type="submit" id="logged" value="<?php  echo isset($customer)? 'logged': 'unknown';?>" > Sign Out </button>
+                            <?php if($customer['user']['stockpiller'] == 'piller'):?>
+                                <a href="<?php echo base_url('index.php/Habit/stock_piller'); ?>" id="for_stockpiller">Your Stock pile</a>
+                            <?php elseif($customer['user']['stockpiller'] == 'non-piller'):?>
+                                <a href="<?php echo base_url('index.php/Habit/stock_piller/from_nav'); ?>" id="for_non_stockpiller">You want to stockpile?</a>
+                            <?php endif;?>
+                    </form>
+                <?php endif;?> 
             </div>
         </nav>
         <script>
+
             let genZ = document.querySelector(".gen_z");
             let drop = document.querySelector("#drop");
             drop.addEventListener("click",dropDown);
+
+            let logged = document.querySelector("#logged");
+            let logout = document.querySelector("#logout");
+            
+
             let dropHelp = document.querySelector("#drop_help");
             let helpers = document.querySelector(".helpers");
             dropHelp.addEventListener("click",dropHelpers);
+
             
+            if(logged.value == 'unknown')
+            {
+                logout.style.display = 'none' 
+            }
+            // else if(logged.value == 'logged')
+            // {
+            //     logout.style.display = 'block'
+            // }
+
             function dropDown(){
                 if (genZ.style.display == 'none'){
                     genZ.style.display = 'grid';
-                   
                 }
                 else{
                     genZ.style.display = 'none';
                 }
+                
             }
+
             function dropHelpers(){
                 if (helpers.style.display == 'none'){
                     helpers.style.display = 'grid';

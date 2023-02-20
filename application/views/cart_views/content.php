@@ -8,11 +8,6 @@
     <title>Document</title>
 </head>
 <body>
-    <div>
-        <div></div>
-        <p></p>
-        <h3></h3>
-        <img src="<?php?>" alt="">
-    </div>
+        
 </body>
 </html>

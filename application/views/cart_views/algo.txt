@@ -5,4 +5,8 @@ build a cart system
 create a table for each stockpiller
 and a landing page for each stockpiler to monitor and manage their their pile
 create an admin to create product table
-save images path to database
+save images path in database
+
+
+
+stock_page: ship implementation: echo a form isset(post ship) form structure: quantity: implement a two button increment,decrement default value is pile quantity -> shipping address: collect users shipping address(however u want) -> submit button.

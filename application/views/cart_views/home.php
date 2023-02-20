@@ -20,17 +20,19 @@
     </style>
 </head>
 <body>
-    <?php foreach ($products as  $info): ?>
-        <div class="items">
-            <a href="<?php echo 'shop/'.$info['id']; ?>">
-                <img src="<?php echo base_url('resources/images/'.$info['image']); ?>" alt="" id="">
-                <p><?php echo $info['name']; ?></p>
-                <div class="price">
-                    <h4>&#8358</h4>
-                    <span><?php echo $info['price']; ?></span>
-                </div>
-            </a>
-        </div>
+    <?php foreach ($product as  $info): ?>
+        <?php if( $info != $product['count']):?>
+            <div class="items">
+                <a href="<?php echo base_url('index.php/Habit/shop/'.$info['product']['product_id']); ?>">
+                    <img src="<?php echo base_url('resources/images/'.$info['product']['image']); ?>" alt="" id="">
+                    <p><?php echo $info['product']['name']; ?></p>
+                    <div class="price">
+                        <h4>&#8358</h4>
+                        <span><?php echo $info['formatted']; ?></span>
+                    </div>
+                </a>
+            </div>
+        <?php endif;?>
     <?php endforeach; ?>
 </body>
 </html>
